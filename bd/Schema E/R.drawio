@@ -1,1 +1,25 @@
-<mxfile host="app.diagrams.net" modified="2021-08-17T16:00:19.615Z" agent="5.0 (X11)" etag="wAz2LnIyi5Ojj8GBHhUD" version="14.9.7" type="github"><diagram id="3u40vcGfyuTVciJH6JJ8" name="Page-1">tZTfT8IwEMf/mj2S7EcAX2GgaBQSMRp9q+uxNXa9pSsO/Ott2Y1tEhJ48GnXz/1o73vtvCjOd3eaFdkTcpBe6POdF828MAyC4dh+HNnXZBRENUi14BTUgrX4AYI+0a3gUPYCDaI0oujDBJWCxPQY0xqrftgGZX/XgqVwAtYJk6f0TXCTNX35futYgEgz2vpmSI6cNcEEyoxxrDoomntRrBFNbeW7GKQTr9Glzrs94z0eTIMylyTMB0U4XjyycvVcyRcpH8qP9wFV+WZySw3TYc2+UUDjVnFwRXwvmlaZMLAuWOK8lZ25ZZnJpV0F1qRyoA3szp4zOHZvrw1gDkbvbQgljEmvfXMRaF115G80zTrKj4gxmnh6rNyKYg3S5QqNwhONXidxfL+cLGerE7Vs36YviYZS/LDPQ4BTkG0NlvU9d24mRaqsnVh5QFvgxBP2Ak7IkQvOXfK0QKHMobnh1BvOLNkIKWOUaNNmCpULKo3GL/gD+yPcoDL00ILR/8wsvHBm4fUzs8v2zRx8nT9PNP8F</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2021-08-17T16:04:30.210Z" agent="5.0 (X11)" etag="0DEiyyzSRVx3q8myfwJF" version="14.9.7" type="github">
+  <diagram id="3u40vcGfyuTVciJH6JJ8" name="Page-1">
+    <mxGraphModel dx="868" dy="460" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="E-p27HLasORwlTllJsZY-1" value="" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="70" y="100" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="E-p27HLasORwlTllJsZY-2" value="VACCINANDO" style="text;html=1;resizable=0;autosize=1;align=center;verticalAlign=middle;points=[];fillColor=none;strokeColor=none;rounded=0;fontSize=16;" parent="1" vertex="1">
+          <mxGeometry x="70" y="120" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="ZrrElcspZVIrCYB-4CRj-1" value="" style="endArrow=none;html=1;" edge="1" parent="1">
+          <mxGeometry width="50" height="50" relative="1" as="geometry">
+            <mxPoint x="84.5" y="100" as="sourcePoint" />
+            <mxPoint x="84.5" y="40" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="ZrrElcspZVIrCYB-4CRj-2" value="" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="80" y="30" width="10" height="10" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
