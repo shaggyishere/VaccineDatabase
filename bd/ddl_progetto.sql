@@ -15,6 +15,9 @@
 	Si procede poi col popolare le 4 tabelle principali di cui sopra, e per il resto si può popolare senza problemi.
 */
 
+drop sequence if exists SequenzaMedico cascade;
+drop sequence if exists SequenzaCentro cascade;
+drop sequence if exists SequenzaVaccinando cascade;
 drop table if exists Preadesione;
 drop table if exists Allergico;
 drop table if exists Vaccinazione;
@@ -32,6 +35,9 @@ drop table if exists Allergia;
 
 /* DEFINIZIONE TABLE DDL*/
 
+create sequence SequenzaVaccinando
+increment by 1 start 1;
+create domain Vacc_id as integer default nextval('SequenzaVaccinando');
 create table Vaccinando (
 	CF char(16) not null ,
 	Nome varchar(20) not null ,
@@ -45,14 +51,21 @@ create table Vaccinando (
 			  	categoria = 'SOGGETTO FRAGILE' or
 			  	categoria = 'ALTRO') not null ,
 	Positività_pregressa boolean not null ,
-	constraint pk_vaccinando primary key (CF)
+	IdVacc Vacc_id,
+	constraint pk_vaccinando primary key (IdVacc),
+	unique (CF)
 );
 
+create sequence SequenzaCentro
+increment by 1 start 1;
+create domain Centro_id as integer default nextval('SequenzaCentro');
 create table Centro_Vaccinale (
 	Nome varchar(20) not null ,
 	Citta varchar(20) not null ,
 	Indirizzo varchar(30) not null ,
-	constraint pk_centro primary key (Nome,Citta)
+	CentroId Centro_id,
+	constraint pk_centro primary key (CentroId),
+	unique (Nome, Citta)
 );
 
 create table Vaccino (
@@ -77,6 +90,9 @@ create table Effetto_allergico (
 	constraint pk_effetto primary key (nome)
 );
 
+create sequence SequenzaMedico
+increment by 1 start 1;
+create domain Medico_id as integer default nextval('SequenzaMedico');
 create table Medico (
 	CF char(16) not null ,
 	Nome_Centro varchar(20) not null , 
@@ -89,10 +105,12 @@ create table Medico (
 	Qualifica varchar(14) 
 		check (	qualifica = 'BASE' or
 			  	qualifica = 'SPECIALIZZATO') not null ,
-	constraint pk_medico primary key (CF),
+	MedicoId Medico_id,
+	constraint pk_medico primary key (MedicoId),
 	constraint fk_medicocentro 
-			   foreign key (nome_Centro,citta_centro) references Centro_Vaccinale(nome,citta)
-				on update cascade on delete set null
+			   foreign key (Nome_Centro,Citta_centro) references Centro_Vaccinale(Nome,Citta)
+				on update cascade on delete set null,
+	unique(CF)
 );
 
 create table Preadesione (
@@ -127,7 +145,7 @@ create table Vaccinazione (
 	Data_vacc date not null ,
 	Ora time not null ,
 	constraint pk_vaccinazione primary key (Vaccinando,Data_vacc) ,
-	unique (nome_centro, citta_centro, ora) ,
+	--unique (nome_centro, citta_centro, ora) ,
 	constraint fk_vaccinazionevaccinando
 				foreign key (vaccinando) references vaccinando(CF)
 					on update cascade on delete cascade ,
@@ -144,7 +162,7 @@ create table Convocazione (
 	Ora time not null ,
 	Vaccino varchar(20) not null ,
 	constraint pk_convocazione primary key (Vaccinando,Data_conv) ,
-	unique (nome_centro, citta_centro, ora) ,
+	--unique (nome_centro, citta_centro, ora) ,
 	constraint fk_convocazionevaccinando
 				foreign key (vaccinando) references vaccinando(CF)
 					on update cascade on delete cascade ,
@@ -204,8 +222,5 @@ create table Report (
 					on update cascade on delete cascade ,
 	constraint fk_reportlotto
 				foreign key (numero_lotto) references Lotto(Numero)
-					on update cascade on delete cascade ,
-	constraint fk_reportaeffetto
-				foreign key (Effetto_allergico) references Effetto_allergico(nome)
-					on update cascade on delete cascade
+					on update cascade on delete cascade 
 );
