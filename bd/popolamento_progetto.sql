@@ -56,10 +56,10 @@ insert into allergico values ('CD234CFGGIOG92D', 'ananas');
 
 select * from allergico;
 
-insert into vaccinazione values ('CD234CFGGIOG92D', 'San Raffaele', 'Milano', '03/30/2021', '08:30');
-insert into vaccinazione values ('PE234CFGGIOG01D', 'Luci', 'Roma', '12/22/2021', '18:42');
-insert into vaccinazione values ('QE234FCGGIOG53D', 'San Raffaele', 'Milano', '07/30/2021', '17:00');
-insert into vaccinazione values ('CD234CFGGIOG92D', 'Nuvola Lavazza', 'Torino', '01/11/2021', '09:45');
+insert into vaccinazione values ('CD234CFGGIOG92D', 'San Raffaele', 'Milano', '03/30/2021', '08:30', 'GTRKSS90H23F106T');
+insert into vaccinazione values ('PE234CFGGIOG01D', 'Luci', 'Roma', '12/22/2021', '18:42', 'VNWJFN33R13I563K');
+insert into vaccinazione values ('QE234FCGGIOG53D', 'San Raffaele', 'Milano', '07/30/2021', '17:00', 'VNWJFN33R13I563K');
+insert into vaccinazione values ('CD234CFGGIOG92D', 'Nuvola Lavazza', 'Torino', '01/11/2021', '09:45', 'SVNLNS97L53F593Y');
 
 select * from vaccinazione;
 
@@ -70,12 +70,6 @@ insert into convocazione values ('CD234CFGGIOG92D', 'Nuvola Lavazza', 'Torino', 
 
 select * from convocazione;
 
-insert into disponibilita_dosi values ('San Raffaele', 'Milano', 'COVIDIN',10000);
-insert into disponibilita_dosi values ('Luci', 'Roma', 'CORONAX',23000);
-insert into disponibilita_dosi values ('Luci', 'Roma', 'COVIDIN',22000);
-insert into disponibilita_dosi values ('San Raffaele', 'Milano', 'FLUSTOP',42000);
-
-select * from disponibilita_dosi;
 
 insert into lotto values ('67541234', 'COVIDIN', '04/28/2021', '07/30/2029');
 insert into lotto values ('87631192', 'FLUSTOP', '08/27/2021', '07/30/2031');
@@ -83,6 +77,13 @@ insert into lotto values ('87422331', 'CORONAX', '09/11/2021', '07/30/2027');
 insert into lotto values ('09116748', 'COVIDIN', '06/20/2021', '07/30/2035');
 
 select * from lotto;
+
+insert into disponibilita_dosi values ('San Raffaele', 'Milano', '67541234');
+insert into disponibilita_dosi values ('Luci', 'Roma', '67541234');
+insert into disponibilita_dosi values ('Luci', 'Roma', '87422331');
+insert into disponibilita_dosi values ('San Raffaele', 'Milano', '09116748');
+
+select * from disponibilita_dosi;
 
 insert into reazione_allergica values ('87631192', 'diarrea');
 insert into reazione_allergica values ('87631192', 'prurito');
@@ -93,7 +94,7 @@ select * from reazione_allergica;
 
 insert into report values ('GTRKSS90H23F106T', '87631192', 'diarrea', '09/30/2021');
 insert into report values ('GTRKSS90H23F106T', '09116748', 'prurito', '08/15/2021');
-insert into report values ('GTRKSS90H23F106T', '09116748', 'nausea', '03/02/2021');
+insert into report values ('GTRKSS90H23F106T', '09116748', 'irritazione', '03/02/2021');
 
 select * from report;
 

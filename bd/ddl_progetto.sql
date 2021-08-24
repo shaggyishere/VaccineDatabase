@@ -144,6 +144,7 @@ create table Vaccinazione (
 	Citta_centro varchar(20) not null ,
 	Data_vacc date not null ,
 	Ora time not null ,
+	Medico char(16) not null ,
 	constraint pk_vaccinazione primary key (Vaccinando,Data_vacc) ,
 	--unique (nome_centro, citta_centro, ora) ,
 	constraint fk_vaccinazionevaccinando
@@ -151,7 +152,10 @@ create table Vaccinazione (
 					on update cascade on delete cascade ,
 	constraint fk_vaccinazionecentro 
 			   foreign key (nome_Centro,citta_centro) references Centro_Vaccinale(nome,citta)
-				on update cascade on delete cascade
+				on update cascade on delete cascade ,
+	constraint fk_vaccinazionemedico
+					foreign key (medico) references Medico(CF)
+						on update cascade on delete cascade
 );
 
 create table Convocazione (
@@ -174,20 +178,6 @@ create table Convocazione (
 				on update cascade on delete cascade
 );
 
-create table Disponibilita_dosi (
-	Nome_Centro varchar(20) not null , 
-	Citta_centro varchar(20) not null ,
-	Vaccino varchar(20) not null ,
-	Numero_dosi int not null check (numero_dosi >= 0) ,
-	constraint pk_dosi primary key (Nome_Centro,Citta_centro,Vaccino) ,
-	constraint fk_dosicentro 
-			   foreign key (nome_Centro,citta_centro) references Centro_Vaccinale(nome,citta)
-				on update cascade on delete cascade ,
-	constraint fk_dosivaccino 
-			   foreign key (Vaccino) references Vaccino(nome)
-				on update cascade on delete cascade
-);
-
 create table Lotto (
 	Numero char(8) not null ,
 	Vaccino varchar(20) not null ,
@@ -196,6 +186,19 @@ create table Lotto (
 	constraint pk_lotto primary key (Numero) ,
 	constraint fk_lottovaccino 
 			   foreign key (Vaccino) references Vaccino(nome)
+				on update cascade on delete cascade
+);
+
+create table Disponibilita_dosi (
+	Nome_Centro varchar(20) not null , 
+	Citta_centro varchar(20) not null ,
+	Lotto varchar(20) not null ,
+	constraint pk_dosi primary key (Nome_Centro,Citta_centro,Lotto) ,
+	constraint fk_dosicentro 
+			   foreign key (nome_Centro,citta_centro) references Centro_Vaccinale(nome,citta)
+				on update cascade on delete cascade ,
+	constraint fk_dosivaccino 
+			   foreign key (Lotto) references Lotto(numero)
 				on update cascade on delete cascade
 );
 
