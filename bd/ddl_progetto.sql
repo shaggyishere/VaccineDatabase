@@ -183,6 +183,7 @@ create table Lotto (
 	Vaccino varchar(20) not null ,
 	Data_prod date not null ,
 	Data_scad date not null check (data_scad > data_prod),
+	Numero_dosi int not null check (numero_dosi > 0) ,
 	constraint pk_lotto primary key (Numero) ,
 	constraint fk_lottovaccino 
 			   foreign key (Vaccino) references Vaccino(nome)

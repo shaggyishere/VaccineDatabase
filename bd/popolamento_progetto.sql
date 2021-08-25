@@ -71,10 +71,10 @@ insert into convocazione values ('CD234CFGGIOG92D', 'Nuvola Lavazza', 'Torino', 
 select * from convocazione;
 
 
-insert into lotto values ('67541234', 'COVIDIN', '04/28/2021', '07/30/2029');
-insert into lotto values ('87631192', 'FLUSTOP', '08/27/2021', '07/30/2031');
-insert into lotto values ('87422331', 'CORONAX', '09/11/2021', '07/30/2027');
-insert into lotto values ('09116748', 'COVIDIN', '06/20/2021', '07/30/2035');
+insert into lotto values ('67541234', 'COVIDIN', '04/28/2021', '07/30/2029', 15000);
+insert into lotto values ('87631192', 'FLUSTOP', '08/27/2021', '07/30/2031', 20000);
+insert into lotto values ('87422331', 'CORONAX', '09/11/2021', '07/30/2027', 7000);
+insert into lotto values ('09116748', 'COVIDIN', '06/20/2021', '07/30/2035', 9000);
 
 select * from lotto;
 
