@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-08-26T14:18:28.610Z" agent="5.0 (X11)" etag="Ye6o7ltUojuugZEAWZ8T" version="14.9.9" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2021-08-27T09:21:13.765Z" agent="5.0 (X11)" etag="aVnFFskoq-qnAJpv6nBA" version="14.9.9" type="github" pages="2">
   <diagram id="3u40vcGfyuTVciJH6JJ8" name="ERristr">
     <mxGraphModel dx="2570" dy="1550" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="1">
       <root>
@@ -355,8 +355,8 @@
         <mxCell id="e-IhfpROFF-9cVEiDw-P-129" value="Cognome" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="565" y="234.04000000000002" width="70" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="e-IhfpROFF-9cVEiDw-P-130" value="Età" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
-          <mxGeometry x="650" y="234.04000000000002" width="30" height="20" as="geometry" />
+        <mxCell id="e-IhfpROFF-9cVEiDw-P-130" value="Data nascita" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
+          <mxGeometry x="635" y="235.96" width="80" height="20" as="geometry" />
         </mxCell>
         <mxCell id="e-IhfpROFF-9cVEiDw-P-131" value="" style="endArrow=none;html=1;exitX=1;exitY=1;exitDx=0;exitDy=0;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="e-IhfpROFF-9cVEiDw-P-117" target="q9LDl1yz-0mYo0iGjOJ9-15" edge="1">
           <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -587,8 +587,8 @@
         <mxCell id="e-IhfpROFF-9cVEiDw-P-249" value="Cognome" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1755" y="220" width="70" height="20" as="geometry" />
         </mxCell>
-        <mxCell id="e-IhfpROFF-9cVEiDw-P-250" value="Età" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
-          <mxGeometry x="1850" y="229.99999999999997" width="30" height="20" as="geometry" />
+        <mxCell id="e-IhfpROFF-9cVEiDw-P-250" value="Data nascita" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
+          <mxGeometry x="1845" y="225.99999999999997" width="80" height="20" as="geometry" />
         </mxCell>
         <mxCell id="e-IhfpROFF-9cVEiDw-P-251" value="Città" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;" parent="1" vertex="1">
           <mxGeometry x="1890" y="280" width="40" height="20" as="geometry" />
