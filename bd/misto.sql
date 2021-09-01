@@ -1,30 +1,11 @@
+--misto perché c'è dentro sia ddl che dml di popolamento 
+--c'è ancora qualcosa che non va, tipo:
 /*
-	prima vanno fatte le create table di:
-	-vaccinando 
-	-centro vaccinale
-	-vaccino
-	-allergia
-	-effetto allergico
-	e poi il resto in ordine casuale.
+	Forse sarebbe più giusto inserire categoria, positivita_preg e allergie nell'entità PRE-ADESIONE
+	ma così facendo si dovrebbe vedere come far in modo di tenere gli stessi dati nella relazione
+	VACCINANDO (ma è utile in realtà, dato che hanno cardinalità 1,1 nell'associazione) DA VALUTARE!!
+	Manca da finire il ddl e dml a partire dalla relazione CONVOCAZIONE in poi
 */
-
-drop table if exists Preadesione;
-drop table if exists Allergico;
-drop table if exists Dosi_totali;
-drop table if exists Vaccinazione;
-drop table if exists Report;
-drop table if exists Convocazione;
-drop table if exists Reazione_allergica;
-drop table if exists Disponibilita_dosi;
-drop table if exists Lotto;
-drop table if exists Medico;
-drop table if exists Vaccino;
-drop table if exists Vaccinando;
-drop table if exists Centro_Vaccinale;
-drop table if exists Effetto_allergico;
-drop table if exists Allergia;
-
-/* DEFINIZIONE TABLE DDL*/
 
 create table Vaccinando (
 	CF char(16) not null ,
@@ -44,6 +25,14 @@ create table Vaccinando (
 	unique (CF)
 );
 
+insert into vaccinando values ('CF234CFGGIOG22D','Luca', 'Rizzo', '09/22/2000', 'Torino', 'Via Roma 12', 'SFRA', false);
+insert into vaccinando values ('EF234CFEGIOG96D','Nino', 'Franceschini', '04/17/1911', 'Roma', 'Viale Cesana 134', 'PSCO', false);
+insert into vaccinando values ('CD234CFGGIOG92D','Lello', 'Albertini', '11/13/1991', 'Milano', 'Via Garibaldi 41', 'ALTR', true);
+insert into vaccinando values ('PE234CFGGIOG01D','Pippo', 'Mussolini', '12/12/1942', 'Napoli', 'Via Castelletti 11', 'PSAN', true);
+insert into vaccinando values ('QE234FCGGIOG53D','Gianni', 'Potti', '01/06/1910', 'Torino', 'Via Po 3', 'SFRA', false);
+
+
+select idvacc from vaccinando where lower(nome) = 'luca';
 
 create table Centro_Vaccinale (
 	Nome varchar(20) not null ,
@@ -53,6 +42,13 @@ create table Centro_Vaccinale (
 	constraint pk_centro primary key (IdCentro),
 	unique (Nome, Citta)
 );
+
+insert into centro_vaccinale values ('Luci', 'Roma', 'Via Carlo Alberto 11');
+insert into centro_vaccinale values ('Spallanzani', 'Roma', 'Via Carlo Alberto 11');
+insert into centro_vaccinale values ('San Raffaele', 'Milano', 'Via Mazzini 3');
+insert into centro_vaccinale values ('Nuvola Lavazza', 'Torino', 'Via Palermo 89');
+
+select * from centro_vaccinale;
 
 create table Vaccino (
 	Nome varchar(20) not null ,
@@ -68,15 +64,31 @@ create table Vaccino (
 	unique(nome)
 );
 
+insert into vaccino values ('COVIDIN', 79.09, 30, 70, 25, 'D');
+insert into vaccino values ('CORONAX', 92.12, 21, 50, 18, 'D');
+insert into vaccino values ('FLUSTOP', 57, 40, 80, 30, 'S');
+
+select nome,idvaccino from vaccino;
+
 create table Allergia (
 	Nome varchar(20) not null ,
 	constraint pk_allergia primary key (nome)
 );
 
+insert into allergia values ('noci');
+insert into allergia values ('ananas');
+insert into allergia values ('latte');
+
 create table Effetto_allergico (
 	Nome varchar(20) not null ,
 	constraint pk_effetto primary key (nome)
 );
+
+insert into effetto_allergico values ('diarrea');
+insert into effetto_allergico values ('vomito');
+insert into effetto_allergico values ('prurito');
+insert into effetto_allergico values ('dolore braccio');
+insert into effetto_allergico values ('nausea');
 
 create table Medico (
 	CF char(16) not null ,
@@ -86,7 +98,7 @@ create table Medico (
 	Data_nascita date not null ,
 	Citta varchar(20) not null ,
 	Indirizzo varchar(30) not null ,
-	Qualifica char 
+	Qualifica char(4) 
 		check (	qualifica = 'BASE' or
 			  	qualifica = 'SPEC') not null ,
 	IdMedico serial ,
@@ -96,6 +108,16 @@ create table Medico (
 				on update cascade on delete set null,
 	unique(CF)
 );
+
+select nome,citta,idcentro from centro_vaccinale;
+
+insert into medico values ('GTRKSS90H23F106T', 1, 'Gino', 'Strada', '01/10/1973', 'Milano', 'Via del Campo', 'BASE');
+insert into medico values ('CDPVWD67L21B248K ', 1, 'Paolo', 'Villa', '03/11/1954', 'Napoli', 'Via Garibaldi', 'SPEC');
+insert into medico values ('SVNLNS97L53F593Y', 2, 'Nicola', 'Strada', '06/30/1931', 'Cunedo', 'Via dei Santi', 'BASE');
+insert into medico values ('VNWJFN33R13I563K', 3, 'Lino', 'Antonelli', '03/11/1966', 'Trapani', 'Via Girolamo', 'SPEC');
+insert into medico values ('YKSSMG84T67B662T', 4, 'Franco', 'Paoli', '12/12/1938', 'Milano', 'Via De Andrè', 'BASE');
+
+select cf,idmedico from medico;
 
 --da rivedere soprattutto la pk perché non mi sembra sensata (fixed)
 create table Preadesione (
@@ -112,6 +134,13 @@ create table Preadesione (
 					on update cascade on delete cascade
 );
 
+select * from vaccinando where cf like 'QE234FCGGIOG53D';
+
+insert into preadesione values ('QE234FCGGIOG53D', 'app', '07/03/2021', '18:30', '3999320110');
+insert into preadesione values ('EF234CFEGIOG96D', 'WEB', '08/03/2021', '17:30', null, 'csai@ssasj.com');
+
+select cf,idpread from preadesione;
+
 create table Allergico (
 	Vaccinando integer not null ,
 	Allergia varchar(20) not null ,
@@ -123,6 +152,14 @@ create table Allergico (
 				foreign key (Allergia) references Allergia(nome)
 					on update cascade on delete cascade
 );
+
+select idvacc from vaccinando;
+
+insert into allergico values (1, 'noci');
+insert into allergico values (1, 'latte');
+insert into allergico values (4, 'ananas');
+insert into allergico values (5, 'noci');
+insert into allergico values (3, 'ananas');
 
 create table Convocazione (
 	Vaccinando integer not null , 
