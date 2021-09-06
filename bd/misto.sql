@@ -1,3 +1,19 @@
+drop table if exists Preadesione;
+drop table if exists Allergico;
+drop table if exists Dosi_totali;
+drop table if exists Vaccinazione;
+drop table if exists Report;
+drop table if exists Convocazione;
+drop table if exists Reazione_allergica;
+drop table if exists Disponibilita_dosi;
+drop table if exists Lotto;
+drop table if exists Medico;
+drop table if exists Vaccino;
+drop table if exists Vaccinando;
+drop table if exists Centro_Vaccinale;
+drop table if exists Effetto_allergico;
+drop table if exists Allergia;
+
 --misto perché c'è dentro sia ddl che dml di popolamento 
 --c'è ancora qualcosa che non va, tipo:
 /*
@@ -32,7 +48,7 @@ insert into vaccinando values ('PE234CFGGIOG01D','Pippo', 'Mussolini', '12/12/19
 insert into vaccinando values ('QE234FCGGIOG53D','Gianni', 'Potti', '01/06/1910', 'Torino', 'Via Po 3', 'SFRA', false);
 
 
-select idvacc from vaccinando where lower(nome) = 'luca';
+select idvacc from vaccinando where upper(nome) = 'PIPPO';
 
 create table Centro_Vaccinale (
 	Nome varchar(20) not null ,
@@ -131,10 +147,11 @@ create table Preadesione (
 	constraint pk_preadesione primary key (IDPread),
 	constraint fk_preadesionevaccinando 
 				foreign key (CF) references vaccinando(CF)
-					on update cascade on delete cascade
+					on update cascade on delete cascade,
+	unique(CF)
 );
 
-select * from vaccinando where cf like 'QE234FCGGIOG53D';
+select * from vaccinando where cf = 'QE234FCGGIOG53D';
 
 insert into preadesione values ('QE234FCGGIOG53D', 'app', '07/03/2021', '18:30', '3999320110');
 insert into preadesione values ('EF234CFEGIOG96D', 'WEB', '08/03/2021', '17:30', null, 'csai@ssasj.com');
@@ -164,9 +181,9 @@ insert into allergico values (3, 'ananas');
 create table Convocazione (
 	Vaccinando integer not null , 
 	Centro integer not null ,
+	Vaccino integer not null ,
 	Data_conv date not null ,
 	Ora time not null ,
-	Vaccino integer not null ,
 	IDConv serial ,
 	constraint pk_convocazione primary key (IDConv) ,
 	constraint fk_convocazionevaccinando
@@ -181,6 +198,12 @@ create table Convocazione (
 	unique (vaccinando,data_conv) 
 );
 
+select idcentro from centro_vaccinale;
+
+insert into convocazione values (3, 2, 1, '04/16/2021', '18:30');
+
+select * from convocazione;
+
 create table Lotto (
 	Numero char(8) not null ,
 	Vaccino integer not null ,
@@ -194,13 +217,14 @@ create table Lotto (
 );
 
 create table Vaccinazione (
-	IDVacc integer not null ,
+	Convocazione integer not null ,
 	Medico integer not null ,
 	Lotto char(8) not null ,
 	Reazione riscontrata varchar(20) ,
+	IDVacc serial ,
 	constraint pk_vaccinazione primary key (IdVacc) ,
 	constraint fk_vaccinazioneconvocazione 
-				foreign key (Idvacc) references Convocazione(IdConv)
+				foreign key (Convocazione) references Convocazione(IdConv)
 					on update cascade on delete cascade ,
 	constraint fk_vaccinazionemedico
 				foreign key (medico) references Medico(IDMedico)
@@ -215,17 +239,17 @@ create table Disponibilita_dosi (
 	Centro integer not null ,
 	Lotto char(8) not null ,
 	constraint pk_dosi primary key (Centro,Lotto) ,
-	constraint fk_dosicentro 
+	constraint fk_dispdosicentro 
 			   foreign key (centro) references Centro_Vaccinale(IdCentro)
 				on update cascade on delete cascade ,
-	constraint fk_dosivaccino 
+	constraint fk_dispdosivaccino 
 			   foreign key (Lotto) references Lotto(numero)
 				on update cascade on delete cascade
 );
 
 create table Dosi_totali (
 	Centro integer not null ,
-	Vaccino char(8) not null ,
+	Vaccino integer not null ,
 	Quantita integer check (quantita > 0) not null ,
 	constraint pk_dosi primary key (Centro,Vaccino,Quantita) ,
 	constraint fk_dosicentro 
@@ -238,7 +262,7 @@ create table Dosi_totali (
 
 create table Reazione_allergica (
 	Numero_lotto char(8) not null ,
-	Effetto varchar(15) not null ,
+	Effetto varchar(20) not null ,
 	constraint pk_reazione primary key (Numero_lotto,Effetto),
 	constraint fk_reazionelotto
 				foreign key (numero_lotto) references Lotto(Numero)
