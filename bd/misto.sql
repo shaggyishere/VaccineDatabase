@@ -14,14 +14,6 @@ drop table if exists Centro_Vaccinale;
 drop table if exists Effetto_allergico;
 drop table if exists Allergia;
 
---misto perché c'è dentro sia ddl che dml di popolamento 
---c'è ancora qualcosa che non va, tipo:
-/*
-	Forse sarebbe più giusto inserire categoria, positivita_preg e allergie nell'entità PRE-ADESIONE
-	ma così facendo si dovrebbe vedere come far in modo di tenere gli stessi dati nella relazione
-	VACCINANDO (ma è utile in realtà, dato che hanno cardinalità 1,1 nell'associazione) DA VALUTARE!!
-	Manca da finire il ddl e dml a partire dalla relazione CONVOCAZIONE in poi
-*/
 
 create table Vaccinando (
 	CF char(16) not null ,
@@ -201,6 +193,10 @@ create table Convocazione (
 select idcentro from centro_vaccinale;
 
 insert into convocazione values (3, 2, 1, '04/16/2021', '18:30');
+insert into convocazione values (4, 2, 1, '04/12/2021', '07:30');
+insert into convocazione values (1, 1, 2, '07/01/2021', '19:30');
+insert into convocazione values (2, 4, 3, '08/29/2021', '12:30');
+insert into convocazione values (4, 2, 1, '05/01/2021', '08:30');
 
 select * from convocazione;
 
@@ -216,49 +212,14 @@ create table Lotto (
 				on update cascade on delete cascade
 );
 
-create table Vaccinazione (
-	Convocazione integer not null ,
-	Medico integer not null ,
-	Lotto char(8) not null ,
-	Reazione riscontrata varchar(20) ,
-	IDVacc serial ,
-	constraint pk_vaccinazione primary key (IdVacc) ,
-	constraint fk_vaccinazioneconvocazione 
-				foreign key (Convocazione) references Convocazione(IdConv)
-					on update cascade on delete cascade ,
-	constraint fk_vaccinazionemedico
-				foreign key (medico) references Medico(IDMedico)
-					on update cascade on delete cascade ,
-	constraint fk_vaccinazionelotto
-				foreign key (lotto) references Lotto(Numero)
-					on update cascade on delete cascade
-);
+insert into Lotto values('87312413', 2, '01/01/2021', '01/01/2024', 120000);
+insert into Lotto values('42357651', 1, '05/01/2021', '01/01/2024', 150000);
+insert into Lotto values('98726347', 1, '06/01/2021', '01/01/2024', 100000);
+insert into Lotto values('09131893', 3, '01/10/2021', '01/01/2024', 140000);
+insert into Lotto values('11251095', 2, '03/20/2021', '01/01/2024', 120000);
 
 
-create table Disponibilita_dosi (
-	Centro integer not null ,
-	Lotto char(8) not null ,
-	constraint pk_dosi primary key (Centro,Lotto) ,
-	constraint fk_dispdosicentro 
-			   foreign key (centro) references Centro_Vaccinale(IdCentro)
-				on update cascade on delete cascade ,
-	constraint fk_dispdosivaccino 
-			   foreign key (Lotto) references Lotto(numero)
-				on update cascade on delete cascade
-);
-
-create table Dosi_totali (
-	Centro integer not null ,
-	Vaccino integer not null ,
-	Quantita integer check (quantita > 0) not null ,
-	constraint pk_dosi primary key (Centro,Vaccino,Quantita) ,
-	constraint fk_dosicentro 
-			   foreign key (centro) references Centro_Vaccinale(IdCentro)
-				on update cascade on delete cascade ,
-	constraint fk_dosivaccino 
-			   foreign key (Vaccino) references Vaccino(IDVaccino)
-				on update cascade on delete cascade
-);
+select * from lotto;
 
 create table Reazione_allergica (
 	Numero_lotto char(8) not null ,
@@ -270,6 +231,78 @@ create table Reazione_allergica (
 	constraint fk_reazioneallergia
 				foreign key (Effetto) references Effetto_allergico(nome)
 					on update cascade on delete cascade
+);
+
+insert into reazione_allergica values('98726347', 'diarrea');
+insert into reazione_allergica values('98726347', 'nausea');
+insert into reazione_allergica values('98726347', 'vomito');
+insert into reazione_allergica values('09131893', 'dolore braccio');
+
+select * from reazione_allergica;
+
+create table Vaccinazione (
+	Convocazione integer not null ,
+	Medico integer not null ,
+	Lotto char(8) not null ,
+	Reazione_riscontrata varchar(20) ,
+	IDVacc serial ,
+	constraint pk_vaccinazione primary key (IdVacc) ,
+	constraint fk_vaccinazioneconvocazione 
+				foreign key (Convocazione) references Convocazione(IdConv)
+					on update cascade on delete cascade ,
+	constraint fk_vaccinazionemedico
+				foreign key (medico) references Medico(IDMedico)
+					on update cascade on delete cascade ,
+	constraint fk_vaccinazionelotto
+				foreign key (lotto) references Lotto(Numero)
+					on update cascade on delete cascade,
+	unique(convocazione)
+);
+
+select idconv from convocazione;
+select idmedico from medico;
+select numero from lotto;
+
+insert into vaccinazione values(3, 4, '98726347', 'febbre');
+insert into vaccinazione values(2, 5, '98726347');
+insert into vaccinazione values(1, 3, '09131893');
+insert into vaccinazione values(1, 4, '98726347', 'nausea');
+insert into vaccinazione values(4, 2, '09131893');
+
+select * from vaccinazione;
+
+create table Disponibilita_dosi (
+	Centro integer not null ,
+	Lotto char(8) not null ,
+	constraint pk_dispdosi primary key (Centro,Lotto) ,
+	constraint fk_dispdosicentro 
+			   foreign key (centro) references Centro_Vaccinale(IdCentro)
+				on update cascade on delete cascade ,
+	constraint fk_dispdosivaccino 
+			   foreign key (Lotto) references Lotto(numero)
+				on update cascade on delete cascade
+);
+
+select numero from lotto;
+
+insert into disponibilita_dosi values(3, '87312413');
+insert into disponibilita_dosi values(2, '42357651');
+insert into disponibilita_dosi values(1, '09131893');
+insert into disponibilita_dosi values(2, '09131893');
+
+select * from disponibilita_dosi;
+
+create table Dosi_totali (
+	Centro integer not null ,
+	Vaccino integer not null ,
+	Quantita integer check (quantita > 0) not null ,
+	constraint pk_dositot primary key (Centro,Vaccino,Quantita) ,
+	constraint fk_dositotcentro 
+			   foreign key (centro) references Centro_Vaccinale(IdCentro)
+				on update cascade on delete cascade ,
+	constraint fk_dositotvaccino 
+			   foreign key (Vaccino) references Vaccino(IDVaccino)
+				on update cascade on delete cascade
 );
 
 create table Report (
@@ -285,3 +318,8 @@ create table Report (
 				foreign key (numero_lotto) references Lotto(Numero)
 					on update cascade on delete cascade 
 );
+
+select * from convocazione;
+
+insert into report values (4, '98726347', 'febbre', '2021-07-01');
+insert into report values (4, '98726347', 'nausea', '2021-04-16');

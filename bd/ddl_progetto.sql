@@ -24,7 +24,6 @@ drop table if exists Centro_Vaccinale;
 drop table if exists Effetto_allergico;
 drop table if exists Allergia;
 
-/* DEFINIZIONE TABLE DDL*/
 
 create table Vaccinando (
 	CF char(16) not null ,
@@ -32,7 +31,9 @@ create table Vaccinando (
 	Cognome varchar(20) not null ,
 	Data_nascita date not null ,
 	Città varchar(20) not null ,
-	Indirizzo varchar(30) not null ,
+	Via varchar(20) not null ,
+	Civico varchar(3) not null ,
+	CAP char(5) not null ,
 	Categoria char(4) 
 		check (	categoria = 'PSAN' or
 			  	categoria = 'PSCO' or
@@ -44,11 +45,12 @@ create table Vaccinando (
 	unique (CF)
 );
 
-
 create table Centro_Vaccinale (
 	Nome varchar(20) not null ,
 	Citta varchar(20) not null ,
-	Indirizzo varchar(30) not null ,
+	Via varchar(20) not null ,
+	Civico varchar(3) not null ,
+	CAP char(5) not null ,
 	IdCentro serial ,
 	constraint pk_centro primary key (IdCentro),
 	unique (Nome, Citta)
@@ -85,8 +87,10 @@ create table Medico (
 	Cognome varchar(20) not null ,
 	Data_nascita date not null ,
 	Citta varchar(20) not null ,
-	Indirizzo varchar(30) not null ,
-	Qualifica char 
+	Via varchar(20) not null ,
+	Civico varchar(3) not null ,
+	CAP char(5) not null ,
+	Qualifica char(4) 
 		check (	qualifica = 'BASE' or
 			  	qualifica = 'SPEC') not null ,
 	IdMedico serial ,
@@ -97,7 +101,6 @@ create table Medico (
 	unique(CF)
 );
 
---da rivedere soprattutto la pk perché non mi sembra sensata (fixed)
 create table Preadesione (
 	CF char(16) not null ,
 	Modalita char(3) check (lower(modalita) = 'app' or lower(modalita) = 'web') not null ,
@@ -157,11 +160,23 @@ create table Lotto (
 				on update cascade on delete cascade
 );
 
+create table Reazione_allergica (
+	Numero_lotto char(8) not null ,
+	Effetto varchar(20) not null ,
+	constraint pk_reazione primary key (Numero_lotto,Effetto),
+	constraint fk_reazionelotto
+				foreign key (numero_lotto) references Lotto(Numero)
+					on update cascade on delete cascade ,
+	constraint fk_reazioneallergia
+				foreign key (Effetto) references Effetto_allergico(nome)
+					on update cascade on delete cascade
+);
+
 create table Vaccinazione (
 	Convocazione integer not null ,
 	Medico integer not null ,
 	Lotto char(8) not null ,
-	Reazione riscontrata varchar(20) ,
+	Reazione_riscontrata varchar(20) ,
 	IDVacc serial ,
 	constraint pk_vaccinazione primary key (IdVacc) ,
 	constraint fk_vaccinazioneconvocazione 
@@ -172,14 +187,14 @@ create table Vaccinazione (
 					on update cascade on delete cascade ,
 	constraint fk_vaccinazionelotto
 				foreign key (lotto) references Lotto(Numero)
-					on update cascade on delete cascade
+					on update cascade on delete cascade,
+	unique(convocazione)
 );
-
 
 create table Disponibilita_dosi (
 	Centro integer not null ,
 	Lotto char(8) not null ,
-	constraint pk_dosi primary key (Centro,Lotto) ,
+	constraint pk_dispdosi primary key (Centro,Lotto) ,
 	constraint fk_dispdosicentro 
 			   foreign key (centro) references Centro_Vaccinale(IdCentro)
 				on update cascade on delete cascade ,
@@ -192,25 +207,13 @@ create table Dosi_totali (
 	Centro integer not null ,
 	Vaccino integer not null ,
 	Quantita integer check (quantita > 0) not null ,
-	constraint pk_dosi primary key (Centro,Vaccino,Quantita) ,
-	constraint fk_dosicentro 
+	constraint pk_dositot primary key (Centro,Vaccino,Quantita) ,
+	constraint fk_dositotcentro 
 			   foreign key (centro) references Centro_Vaccinale(IdCentro)
 				on update cascade on delete cascade ,
-	constraint fk_dosivaccino 
+	constraint fk_dositotvaccino 
 			   foreign key (Vaccino) references Vaccino(IDVaccino)
 				on update cascade on delete cascade
-);
-
-create table Reazione_allergica (
-	Numero_lotto char(8) not null ,
-	Effetto varchar(20) not null ,
-	constraint pk_reazione primary key (Numero_lotto,Effetto),
-	constraint fk_reazionelotto
-				foreign key (numero_lotto) references Lotto(Numero)
-					on update cascade on delete cascade ,
-	constraint fk_reazioneallergia
-				foreign key (Effetto) references Effetto_allergico(nome)
-					on update cascade on delete cascade
 );
 
 create table Report (
