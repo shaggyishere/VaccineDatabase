@@ -1,5 +1,5 @@
 #!/bin/bash
 
-rsync -vrh . ~/Desktop/Università/Materiale\ Didattico/Basi\ di\ Dati/Progetto
+rsync -vrh --del . ~/Desktop/Università/Materiale\ Didattico/Basi\ di\ Dati/Progetto
 
 echo "Sincronizzazione effettuata con successo!"
